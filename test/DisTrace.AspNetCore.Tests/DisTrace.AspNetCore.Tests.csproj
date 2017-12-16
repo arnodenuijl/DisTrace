@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.1" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />  
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DisTrace.AspNetCore\DisTrace.AspNetCore.csproj" />
+    <ProjectReference Include="..\DisTrace.Tests\DisTrace.Tests.csproj" />
+  </ItemGroup>
+
+</Project>
