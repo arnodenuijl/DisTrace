@@ -1,6 +1,6 @@
 #addin "nuget:?package=NuGet.Core&version=2.8.6"
 #addin "Cake.FileHelpers"
-#tool "nuget:?package=xunit.runner.console&version=2.2.0"
+#tool "nuget:?package=xunit.runner.console"
 
 var target        = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -36,7 +36,19 @@ Task("RunTests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    XUnit2($"./test/DisTrace.AspNetCore.Tests/bin/{configuration}/**/*Tests.dll");
+    
+    var projects = GetFiles("./test/DisTrace.AspNetCore.Tests/*.csproj");
+        foreach(var project in projects)
+        {
+            DotNetCoreTest(
+                project.FullPath,
+                new DotNetCoreTestSettings()
+                {
+                    Configuration = configuration,
+                    NoBuild = true
+                });
+        }
+
     XUnit2($"./test/DisTrace.WebApi.Tests/bin/{configuration}/**/*Tests.dll");
 });
 
