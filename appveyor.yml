@@ -1,9 +1,8 @@
 version: 1.0.{build}
 image: Visual Studio 2017
 install:
-- cmd:
-    - type c:\windows\system32\drivers\etc\hosts
-    - dotnet restore
+  - type c:\windows\system32\drivers\etc\hosts
+  - dotnet restore
 
 build:
   verbosity: minimal
