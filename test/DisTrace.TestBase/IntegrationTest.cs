@@ -5,7 +5,7 @@ using DisTrace.Core;
 using DisTrace.HttpClient;
 using Xunit;
 
-namespace DisTrace.Tests
+namespace DisTrace.TestBase
 {
     public abstract class IntegrationTest
     {

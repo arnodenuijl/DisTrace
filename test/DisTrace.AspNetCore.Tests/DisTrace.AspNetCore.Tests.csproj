@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DisTrace.AspNetCore\DisTrace.AspNetCore.csproj" />
-    <ProjectReference Include="..\DisTrace.Tests\DisTrace.Tests.csproj" />
+    <ProjectReference Include="..\DisTrace.TestBase\DisTrace.TestBase.csproj" />
   </ItemGroup>
 
 </Project>

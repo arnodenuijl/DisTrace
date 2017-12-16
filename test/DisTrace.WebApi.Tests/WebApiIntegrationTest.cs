@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Web.Http;
 using DisTrace.Core;
-using DisTrace.Tests;
+using DisTrace.TestBase;
 
 namespace DisTrace.WebApi.Tests
 {

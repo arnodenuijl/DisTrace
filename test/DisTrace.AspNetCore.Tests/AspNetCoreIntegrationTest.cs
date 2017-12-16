@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using DisTrace.Core;
-using DisTrace.Tests;
-using Microsoft.AspNetCore.Builder;
+using DisTrace.TestBase;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,20 +20,5 @@ namespace DisTrace.AspNetCore.Tests
                 var server = new TestServer(webHostBuilder);
                 return server.CreateHandler();
             };
-    }
-
-
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseMiddleware<SetTracingContextFromRequestMiddleware>();
-
-            app.Run(async context => { await context.Response.WriteAsync("Hello, World!"); });
-        }
     }
 }

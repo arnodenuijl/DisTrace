@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8BBCEF1E-3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisTrace.WebApi.Tests", "test\DisTrace.WebApi.Tests\DisTrace.WebApi.Tests.csproj", "{ADF920B6-C650-48B6-B9BC-7288A29E68AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisTrace.Tests", "test\DisTrace.Tests\DisTrace.Tests.csproj", "{60C2FA82-CB66-4ABB-8667-39BBE5512D84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisTrace.TestBase", "test\DisTrace.TestBase\DisTrace.TestBase.csproj", "{60C2FA82-CB66-4ABB-8667-39BBE5512D84}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisTrace.AspNetCore.Tests", "test\DisTrace.AspNetCore.Tests\DisTrace.AspNetCore.Tests.csproj", "{F5730B02-7098-4719-B782-81CBB9C67009}"
 EndProject

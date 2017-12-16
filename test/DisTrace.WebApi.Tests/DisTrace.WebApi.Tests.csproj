@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DisTrace.WebApi.Tests</RootNamespace>
     <AssemblyName>DisTrace.WebApi.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,7 +73,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\DisTrace.Core\DisTrace.Core.csproj">
@@ -83,9 +84,9 @@
       <Project>{D11D8FD0-B993-4D61-9A2A-976DBF2E97F4}</Project>
       <Name>DisTrace.HttpClient</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DisTrace.Tests\DisTrace.Tests.csproj">
+    <ProjectReference Include="..\DisTrace.TestBase\DisTrace.TestBase.csproj">
       <Project>{60C2FA82-CB66-4ABB-8667-39BBE5512D84}</Project>
-      <Name>DisTrace.Tests</Name>
+      <Name>DisTrace.TestBase</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\DisTrace.WebApi\DisTrace.WebApi.csproj">
       <Project>{5F8FA0DF-24E0-4F7B-9E84-C3CB2BB1FCA6}</Project>
