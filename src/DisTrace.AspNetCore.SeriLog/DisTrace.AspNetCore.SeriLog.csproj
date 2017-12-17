@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.1</Version>
+    <Authors>Arno den Uijl</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/arnodenuijl/DisTrace/blob/master/UNLICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/arnodenuijl/DisTrace</PackageProjectUrl>
+</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.6.0" />

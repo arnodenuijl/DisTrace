@@ -1,12 +1,19 @@
 #addin "nuget:?package=NuGet.Core&version=2.8.6"
 #addin "Cake.FileHelpers"
+#addin nuget:?package=Cake.Git
 #tool "nuget:?package=xunit.runner.console"
+#tool "nuget:?package=GitVersion.CommandLine"
 
 var target        = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var buildDir      = Directory("./build");
 var solution      = "./DisTrace.sln";
 
+var branch = GitBranchCurrent(DirectoryPath.FromString("."));
+var branchName = branch.FriendlyName;
+var sha = branch.Tip.Sha.Substring(0,7);
+
+GitVersion gitVersion;
 
 Task("Clean")
     .Does(() =>
@@ -20,6 +27,20 @@ Task("RestorePackages")
 {
     NuGetRestore(solution);
 });
+
+
+Task("Patch")
+    .IsDependeeOf("Build")
+    .Does(() => 
+    {
+        gitVersion = GitVersion(new GitVersionSettings {
+            UpdateAssemblyInfo = true
+        });
+        Information(gitVersion.FullSemVer);
+        Information(gitVersion.InformationalVersion );
+        Information(gitVersion.AssemblySemVer );
+        Information(gitVersion.SemVer);        
+    });
 
 Task("Build")
     .IsDependentOn("RestorePackages")
@@ -52,7 +73,46 @@ Task("RunTests")
     XUnit2($"./test/DisTrace.WebApi.Tests/bin/{configuration}/**/*Tests.dll");
 });
 
+Task("Pack")
+    .IsDependentOn("RunTests")
+    .Does(() => 
+    {
+        var settings = new NuGetPackSettings 
+        {
+            OutputDirectory = buildDir.Path,
+            Version = gitVersion.AssemblySemVer
+        };
+        NuGetPack("./src/DisTrace.WebApi/DisTrace.WebApi.csproj", settings);
+        NuGetPack("./src/DisTrace.WebApi.SeriLog/DisTrace.WebApi.SeriLog.csproj", settings);
+        
+        var dotNetCorePackSettings = new DotNetCorePackSettings
+        {
+            Configuration = configuration,
+            OutputDirectory = buildDir
+        };
+
+        DotNetCorePack("./src/DisTrace.AspNetCore/DisTrace.AspNetCore.csproj", dotNetCorePackSettings);
+        DotNetCorePack("./src/DisTrace.AspNetCore.SeriLog/DisTrace.AspNetCore.SeriLog.csproj", dotNetCorePackSettings);
+        DotNetCorePack("./src/DisTrace.Core/DisTrace.Core.csproj", dotNetCorePackSettings);
+        DotNetCorePack("./src/DisTrace.HttpClient", dotNetCorePackSettings);
+    });
+
+Task("Push")
+    .IsDependentOn("Pack")
+    .Does(() =>
+    {
+            // Get the paths to the packages.
+            var packages = GetFiles($"./{buildDir}/*.nupkg");
+
+            // Push the package.
+            NuGetPush(packages, new NuGetPushSettings {
+                Source = "https://api.nuget.org/v3/index.json",
+                ApiKey = EnvironmentVariable("NUGET_APIKEY")
+            });
+
+    });
 Task("Default")
-    .IsDependentOn("RunTests");
+    .IsDependentOn("Pack")
+    .IsDependentOn("Push");
 
 RunTarget(target);

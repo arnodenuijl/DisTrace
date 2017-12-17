@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.1</Version>
+    <Authors>Arno den Uijl</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/arnodenuijl/DisTrace/blob/master/UNLICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/arnodenuijl/DisTrace</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
