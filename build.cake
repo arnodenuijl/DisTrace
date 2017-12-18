@@ -94,7 +94,12 @@ Task("Pack")
         var settings = new NuGetPackSettings 
         {
             OutputDirectory = buildDir.Path,
-            Version = gitVersion.AssemblySemVer
+            Version = gitVersion.AssemblySemVer,
+            Properties = new Dictionary<string, string>(){
+                {
+                    "Configuration", configuration
+                }
+            }
         };
         NuGetPack("./src/DisTrace.WebApi/DisTrace.WebApi.csproj", settings);
         NuGetPack("./src/DisTrace.WebApi.SeriLog/DisTrace.WebApi.SeriLog.csproj", settings);
