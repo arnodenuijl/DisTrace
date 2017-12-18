@@ -1,4 +1,7 @@
 mode: ContinuousDeployment
-branches: {}
-ignore:
-  sha: []
+
+branches: 
+  releases?[/-]:
+    mode: ContinuousDelivery
+    tag: ''
+    increment: Patch
