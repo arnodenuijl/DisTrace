@@ -120,6 +120,7 @@ Task("Pack")
 Task("Push")
     .IsDependentOn("Pack")
     .WithCriteria(createPackage)
+    .WithCriteria(() => gitVersion.BranchName.StartsWith("release"))
     .Does(() =>
     {
             // Get the paths to the packages.
