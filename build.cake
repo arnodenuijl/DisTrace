@@ -4,7 +4,10 @@
 #tool "nuget:?package=xunit.runner.console"
 #tool "nuget:?package=GitVersion.CommandLine"
 
-var createPackage = Argument("createPackage", false);
+var pushPackageEnv = false;
+Boolean.TryParse(EnvironmentVariable("pushPackage"), out pushPackageEnv);
+
+var pushPackage   = pushPackageEnv || Argument("pushPackage", false);
 var target        = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var buildDir      = Directory("./build");
@@ -14,6 +17,7 @@ var branch = GitBranchCurrent(DirectoryPath.FromString("."));
 var branchName = branch.FriendlyName;
 var sha = branch.Tip.Sha.Substring(0,7);
 
+Information(pushPackage);
 GitVersion gitVersion;
 
 Task("Clean")
@@ -44,7 +48,7 @@ Task("ShowVersion")
 
 Task("Patch")
     .IsDependeeOf("Build")
-    .WithCriteria(createPackage)
+    .WithCriteria(pushPackage)
     .Does(() => 
     {
         gitVersion = GitVersion(new GitVersionSettings {
@@ -88,7 +92,7 @@ Task("RunTests")
 
 Task("Pack")
     .IsDependentOn("RunTests")
-    .WithCriteria(createPackage)
+    .WithCriteria(pushPackage)
     .Does(() => 
     {
         var settings = new NuGetPackSettings 
@@ -119,18 +123,26 @@ Task("Pack")
 
 Task("Push")
     .IsDependentOn("Pack")
-    .WithCriteria(createPackage)
-    .WithCriteria(() => gitVersion.BranchName.StartsWith("release"))
+    .WithCriteria(pushPackage)
+    .WithCriteria(() => new string[] {"master", "develop"}.Contains(gitVersion.BranchName) )
     .Does(() =>
     {
             // Get the paths to the packages.
             var packages = GetFiles($"./{buildDir}/*.nupkg");
-
-            // Push the package.
-            NuGetPush(packages, new NuGetPushSettings {
-                Source = "https://www.myget.org/F/distrace/api/v2/package",
-                ApiKey = EnvironmentVariable("MYGET_APIKEY")
-            });
+            if(gitVersion.BranchName == "develop") {
+                // Push the package.
+                NuGetPush(packages, new NuGetPushSettings {
+                    Source = "https://www.myget.org/F/distrace/api/v2/package",
+                    ApiKey = EnvironmentVariable("MYGET_APIKEY")
+                });
+            }
+            else if(gitVersion.BranchName == "master") {
+                // Push the package.
+                NuGetPush(packages, new NuGetPushSettings {
+                    Source = "https://api.nuget.org/v3/index.json",
+                    ApiKey = EnvironmentVariable("NUGET_APIKEY")
+                });
+            }
 
     });
 Task("Default")
