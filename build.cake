@@ -4,7 +4,7 @@
 #tool "nuget:?package=xunit.runner.console"
 #tool "nuget:?package=GitVersion.CommandLine"
 
-var createPackage        = Argument("createPackage", false);
+var createPackage = Argument("createPackage", false);
 var target        = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var buildDir      = Directory("./build");
@@ -29,6 +29,18 @@ Task("RestorePackages")
     NuGetRestore(solution);
 });
 
+
+Task("ShowVersion")
+    .IsDependeeOf("Build")
+    .Does(() => 
+    {
+        gitVersion = GitVersion();
+   
+        Information(gitVersion.FullSemVer);
+        Information(gitVersion.InformationalVersion );
+        Information(gitVersion.AssemblySemVer );
+        Information(gitVersion.SemVer);        
+    });
 
 Task("Patch")
     .IsDependeeOf("Build")
