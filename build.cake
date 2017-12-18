@@ -54,14 +54,7 @@ Task("Patch")
                 ReplaceRegexInFiles("./**/*.csproj",  
                         @"\<Version\>.*\<\/Version\>", 
                         @"<Version>"+ gitVersion.SemVer + "</Version>");
-        
-
-        
-        Information(gitVersion.FullSemVer);
-        Information(gitVersion.InformationalVersion );
-        Information(gitVersion.AssemblySemVer );
-        Information(gitVersion.SemVer);        
-    });
+     });
 
 Task("Build")
     .IsDependentOn("RestorePackages")
