@@ -4,7 +4,10 @@
 #tool "nuget:?package=xunit.runner.console"
 #tool "nuget:?package=GitVersion.CommandLine"
 
-var pushPackage = Argument("pushPackage", false);
+var pushPackageEnv = false;
+Boolean.TryParse(EnvironmentVariable("pushPackage"), out pushPackageEnv);
+
+var pushPackage   = pushPackageEnv || Argument("pushPackage", false);
 var target        = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var buildDir      = Directory("./build");
