@@ -4,7 +4,7 @@
 #tool "nuget:?package=xunit.runner.console"
 #tool "nuget:?package=GitVersion.CommandLine"
 
-var createPackage = Argument("createPackage", false);
+var pushPackage = Argument("pushPackage", false);
 var target        = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var buildDir      = Directory("./build");
@@ -14,6 +14,7 @@ var branch = GitBranchCurrent(DirectoryPath.FromString("."));
 var branchName = branch.FriendlyName;
 var sha = branch.Tip.Sha.Substring(0,7);
 
+Information(pushPackage);
 GitVersion gitVersion;
 
 Task("Clean")
@@ -44,7 +45,7 @@ Task("ShowVersion")
 
 Task("Patch")
     .IsDependeeOf("Build")
-    .WithCriteria(createPackage)
+    .WithCriteria(pushPackage)
     .Does(() => 
     {
         gitVersion = GitVersion(new GitVersionSettings {
@@ -88,7 +89,7 @@ Task("RunTests")
 
 Task("Pack")
     .IsDependentOn("RunTests")
-    .WithCriteria(createPackage)
+    .WithCriteria(pushPackage)
     .Does(() => 
     {
         var settings = new NuGetPackSettings 
@@ -119,7 +120,7 @@ Task("Pack")
 
 Task("Push")
     .IsDependentOn("Pack")
-    .WithCriteria(createPackage)
+    .WithCriteria(pushPackage)
     .WithCriteria(() => new string[] {"master", "develop"}.Contains(gitVersion.BranchName) )
     .Does(() =>
     {
