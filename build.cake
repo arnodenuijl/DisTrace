@@ -4,6 +4,7 @@
 #tool "nuget:?package=xunit.runner.console"
 #tool "nuget:?package=GitVersion.CommandLine"
 
+var createPackage        = Argument("createPackage", false);
 var target        = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var buildDir      = Directory("./build");
@@ -31,11 +32,18 @@ Task("RestorePackages")
 
 Task("Patch")
     .IsDependeeOf("Build")
+    .WithCriteria(createPackage)
     .Does(() => 
     {
         gitVersion = GitVersion(new GitVersionSettings {
             UpdateAssemblyInfo = true
         });
+
+                ReplaceRegexInFiles("./**/*.csproj",  
+                        @"\<Version\>.*\<\/Version\>", 
+                        @"<Version>"+ gitVersion.SemVer + "</Version>");
+        
+
         
         Information(gitVersion.FullSemVer);
         Information(gitVersion.InformationalVersion );
@@ -75,6 +83,7 @@ Task("RunTests")
 
 Task("Pack")
     .IsDependentOn("RunTests")
+    .WithCriteria(createPackage)
     .Does(() => 
     {
         var settings = new NuGetPackSettings 
@@ -88,17 +97,19 @@ Task("Pack")
         var dotNetCorePackSettings = new DotNetCorePackSettings
         {
             Configuration = configuration,
-            OutputDirectory = buildDir
+            OutputDirectory = buildDir,
+            MSBuildSettings = new DotNetCoreMSBuildSettings().SetVersion(gitVersion.AssemblySemVer)
         };
 
+        DotNetCorePack("./src/DisTrace.Core/DisTrace.Core.csproj", dotNetCorePackSettings);
         DotNetCorePack("./src/DisTrace.AspNetCore/DisTrace.AspNetCore.csproj", dotNetCorePackSettings);
         DotNetCorePack("./src/DisTrace.AspNetCore.SeriLog/DisTrace.AspNetCore.SeriLog.csproj", dotNetCorePackSettings);
-        DotNetCorePack("./src/DisTrace.Core/DisTrace.Core.csproj", dotNetCorePackSettings);
         DotNetCorePack("./src/DisTrace.HttpClient", dotNetCorePackSettings);
     });
 
 Task("Push")
     .IsDependentOn("Pack")
+    .WithCriteria(createPackage)
     .Does(() =>
     {
             // Get the paths to the packages.
@@ -112,7 +123,7 @@ Task("Push")
 
     });
 Task("Default")
-    .IsDependentOn("Pack");
-    // .IsDependentOn("Push");
+    .IsDependentOn("Pack")
+    .IsDependentOn("Push");
 
 RunTarget(target);
