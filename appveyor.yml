@@ -1,5 +1,5 @@
 version: 1.0.{build}
 image: Visual Studio 2017
 build_script:
-- ps: .\build.ps1  --Verbosity=Verbose --createPackage=true
+- ps: .\build.ps1  --Verbosity=Verbose --pushPackage={pushPackage}
 test: off
