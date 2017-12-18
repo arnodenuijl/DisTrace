@@ -1,7 +1,1 @@
-mode: ContinuousDeployment
-
-branches: 
-  releases?[/-]:
-    mode: ContinuousDelivery
-    tag: ''
-    increment: Patch
+mode: ContinuousDelivery
