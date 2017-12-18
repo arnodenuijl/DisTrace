@@ -128,8 +128,8 @@ Task("Push")
 
             // Push the package.
             NuGetPush(packages, new NuGetPushSettings {
-                Source = "https://api.nuget.org/v3/index.json",
-                ApiKey = EnvironmentVariable("NUGET_APIKEY")
+                Source = "https://www.myget.org/F/distrace/api/v2/package",
+                ApiKey = EnvironmentVariable("MYGET_APIKEY")
             });
 
     });
