@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DisTrace.WebApi.SeriLog</id>
+    <version>0.0.1</version>
+    <authors>Arno den Uijl</authors>
+    <owners>Arno den Uijl</owners>
+    <licenseUrl>https://github.com/arnodenuijl/DisTrace/blob/master/UNLICENSE</licenseUrl>
+    <projectUrl>https://github.com/arnodenuijl/DisTrace</projectUrl>
+    <description>Package Description</description>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags></tags>
+  </metadata>
+</package>
