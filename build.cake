@@ -120,17 +120,25 @@ Task("Pack")
 Task("Push")
     .IsDependentOn("Pack")
     .WithCriteria(createPackage)
-    .WithCriteria(() => gitVersion.BranchName.StartsWith("release"))
+    .WithCriteria(() => new string[] {"master", "develop"}.Contains(gitVersion.BranchName) )
     .Does(() =>
     {
             // Get the paths to the packages.
             var packages = GetFiles($"./{buildDir}/*.nupkg");
-
-            // Push the package.
-            NuGetPush(packages, new NuGetPushSettings {
-                Source = "https://www.myget.org/F/distrace/api/v2/package",
-                ApiKey = EnvironmentVariable("MYGET_APIKEY")
-            });
+            if(gitVersion.BranchName == "develop") {
+                // Push the package.
+                NuGetPush(packages, new NuGetPushSettings {
+                    Source = "https://www.myget.org/F/distrace/api/v2/package",
+                    ApiKey = EnvironmentVariable("MYGET_APIKEY")
+                });
+            }
+            else if(gitVersion.BranchName == "master") {
+                // Push the package.
+                NuGetPush(packages, new NuGetPushSettings {
+                    Source = "https://api.nuget.org/v3/index.json",
+                    ApiKey = EnvironmentVariable("NUGET_APIKEY")
+                });
+            }
 
     });
 Task("Default")
