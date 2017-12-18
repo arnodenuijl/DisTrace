@@ -36,6 +36,7 @@ Task("Patch")
         gitVersion = GitVersion(new GitVersionSettings {
             UpdateAssemblyInfo = true
         });
+        
         Information(gitVersion.FullSemVer);
         Information(gitVersion.InformationalVersion );
         Information(gitVersion.AssemblySemVer );
@@ -56,8 +57,7 @@ Task("Build")
 Task("RunTests")
     .IsDependentOn("Build")
     .Does(() =>
-{
-    
+{    
     var projects = GetFiles("./test/DisTrace.AspNetCore.Tests/*.csproj");
         foreach(var project in projects)
         {
@@ -112,7 +112,7 @@ Task("Push")
 
     });
 Task("Default")
-    .IsDependentOn("Pack")
-    .IsDependentOn("Push");
+    .IsDependentOn("Pack");
+    // .IsDependentOn("Push");
 
 RunTarget(target);
