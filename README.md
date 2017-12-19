@@ -14,24 +14,38 @@ There are a lot of ways to do this and a lot of libraries to help you with this.
 ## What’s the concept?
 
 The use case is a system build from multiple parts that call each other. E.g. a microservice based system where different service call each other’s API or consume each other’s events. From there we do two things. We want to track calls and message’s through the system and correlate them. We do that by introducing three ids.
+
 * Request id: Every request/call/unit of work in a service gets its own unique request id. If you e.g. have an API with a /api/random then every call to that API gets a unique request id that is only valid for the duration of that specific request
 
-* Causation id: If a service is called and the caller sends it’s own request id with the request, than the callee can use that as it’s causation id. 
+* Causation id: If a service is called and the caller sends it’s own request id with the request, than the callee can use that as it’s causation id.
 
-* Correlation id: While calls that are related to each other can be linked with each other with only the request and causation ids, it’s convenient to also have a correlation id. This is an id that is the same for all the calls in all the services within one single conversation. 
+* Correlation id: While calls that are related to each other can be linked with each other with only the request and causation ids, it’s convenient to also have a correlation id. This is an id that is the same for all the calls in all the services within one single conversation.
 
-If every call tracks it’s request, causation and correlation ids then we can use them in logging.
+If every component for every request (or other unit of work)  tracks it’s request, causation and correlation ids then we can use them in logging.
 
 # What does this library do?
 
-There is no magic in this all. It’s only a question of doing it, and doing it consequently.
+There is no magic in this all. It’s only a question of doing it, and doing it consequently. This library provides a couple of things to help.
 
-* Core provides a small set of classes to help doing it consequently.
-* TracingContext: A class to hold the request, causation and correlation id
-* ITracingContextProvider: An interface for getting and setting a tracing context. E.g. in a web app you would use an implementation to get and set it on the request context. For a message based system you would make an implementation to get and set the tracing context on the scope of the message handler.
-* SingleTracingContextProvider: A simple implementation of the ITracingContextProvider that just stores it in a field. 
-* TracingContextHeaders: Headers that can be used to store the id’s in e.g. http headers.
-* ......
+## The core
 
-TODO: Elaborate
+* **DisTrace.Core** provides a small set of classes that are used in every situation. Mainly the `TracingContext` class to hold the request, causation and correlation id. And a `ITracingContextProvider` interface that defines methods to put or get the TracingContext on a request/unit of work
 
+## For asp.net core
+
+* **DisTrace.AspNetCore** provides a middleware that can be used to get request and correlation ids from incoming requests, create a `TracingContext` and put them on the request context
+* **DisTrace.AspNetCore.SeriLog** provides a middleware that can be used to get the `TracingContext` from the request context and puts is on the SeriLog logcontext for the scope of the request. This ensures that with everything that is logged, the `TracingContext` is included in the log message
+
+## For WebApi 2
+
+* **DisTrace.WebApi** provides a `DelegatingHandler` implementation that can be used to get request and correlation ids from incoming requests, create a `TracingContext` and put them on the request context using the `HttpRequestTracingContextProvider`
+* **DisTrace.WebApi.SeriLog** provides a `DelegatingHandler` implementation that can be used to get the `TracingContext` from the request context and puts is on the SeriLog logcontext for the scope of the request. This ensures that with everything that is logged, the `TracingContext` is included in the log message
+
+## HttpClient
+
+* **DisTrace.HttpClient** provides `AddTracingContextToRequestHandler`. A `DelegatingHandler` that can be used in a HttpClient. The `AddTracingContextToRequestHandler` takes a `ITracingContextProvider` to get access to the current `TracingContext` when doing an Http call. 
+
+
+
+TODO: Elaborate & examples
+For now, look at the `AspNetCoreIntegrationTest` and the `WebApiIntegrationTest` 
