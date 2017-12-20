@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.1</Version>
+    <Authors>Arno den Uijl</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/arnodenuijl/DisTrace/blob/master/UNLICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/arnodenuijl/DisTrace</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DisTrace.Core\DisTrace.Core.csproj" />
+  </ItemGroup>
+
+</Project>
