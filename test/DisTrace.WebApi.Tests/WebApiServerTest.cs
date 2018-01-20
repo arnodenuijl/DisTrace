@@ -6,7 +6,7 @@ using DisTrace.TestBase;
 
 namespace DisTrace.WebApi.Tests
 {
-    public class WebApiIntegrationTest : IntegrationTest
+    public class WebApiServerTest : ServerTest
     {
         public override Func<ITracingContextProvider, HttpMessageHandler> CreateServerWithTracingContext =>
             serverTracingContextProvider =>

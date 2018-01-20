@@ -20,25 +20,20 @@ namespace DisTrace.AspNetCore
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (tracingContextProvider == null) throw new ArgumentNullException(nameof(tracingContextProvider));
 
-            var requestId = Guid.NewGuid().ToString();
-            var causationId = GetRequestIdFromRequestOrDefault(context);
-            var correlationId = GetCorrelationIdFromRequestOrDefault(context) ?? causationId ?? requestId;
-            tracingContextProvider.SetTracingContext(new TracingContext(requestId, causationId, correlationId));
+            var unitOfWorkId = GetHeaderValueOrDefault(context.Request, TracingContextHeaders.RequestIdHeaderName);
+            var causationId = GetHeaderValueOrDefault(context.Request, TracingContextHeaders.CausationIdHeaderName);
+            var flowId = GetHeaderValueOrDefault(context.Request, TracingContextHeaders.FlowIdHeaderName);
+
+            tracingContextProvider.SetTracingContext(new TracingContext(unitOfWorkId, causationId, flowId));
+
             await _next.Invoke(context);
         }
 
-        private static string GetRequestIdFromRequestOrDefault(HttpContext context)
+        private static string GetHeaderValueOrDefault(HttpRequest request, string headerName)
         {
-            return context.Request
-                .Headers[TracingContextHeaders.RequestIdHeaderName]
-                .LastOrDefault(s => !string.IsNullOrWhiteSpace(s));
-        }
-
-        private static string GetCorrelationIdFromRequestOrDefault(HttpContext context)
-        {
-            return context.Request
-                .Headers[TracingContextHeaders.CorrelationIdHeaderName]
-                .LastOrDefault(s => !string.IsNullOrWhiteSpace(s));
+            return request.Headers.TryGetValue(headerName, out var headers)
+                ? headers.LastOrDefault(s => !string.IsNullOrWhiteSpace(s))
+                : null;
         }
     }
 }

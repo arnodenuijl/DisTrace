@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DisTrace.AspNetCore.Tests
 {
-    public class AspNetCoreIntegrationTest : IntegrationTest
+    public class AspNetCoreServerTest : ServerTest
     {
         public override Func<ITracingContextProvider, HttpMessageHandler> CreateServerWithTracingContext =>
             serverTracingContextProvider =>

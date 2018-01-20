@@ -1,21 +1,36 @@
-﻿namespace DisTrace.Core
+﻿using System;
+
+namespace DisTrace.Core
 {
     public class TracingContext
     {
-        public TracingContext(string requestId, string causationId, string correlationId)
+        public TracingContext(string unitOfWorkId, string causationId, string flowId)
         {
-            RequestId = requestId;
-            CausationId = causationId;
-            CorrelationId = correlationId;
+            UnitOfWorkId = !string.IsNullOrWhiteSpace(unitOfWorkId)
+                ? unitOfWorkId
+                : Guid.NewGuid().ToString();
+
+            CausationId = !string.IsNullOrWhiteSpace(causationId)
+                ? causationId
+                : null;
+
+            FlowId = !string.IsNullOrWhiteSpace(flowId)
+                ? flowId
+                : CausationId ?? UnitOfWorkId;
         }
 
-        public string RequestId { get; }
+        public string UnitOfWorkId { get; }
         public string CausationId { get; }
-        public string CorrelationId { get; }
+        public string FlowId { get; }
 
-        public static TracingContext CreateNew(string requestId)
+        public static TracingContext CreateFromUnitOfWorkId(string unitOfWorkId)
         {
-            return new TracingContext(requestId, null, requestId);
-        }
+            if (string.IsNullOrWhiteSpace(unitOfWorkId))
+            {
+                throw new ArgumentException($"{nameof(unitOfWorkId)} connot be null or empty string", nameof(unitOfWorkId));
+            }
+
+            return new TracingContext(unitOfWorkId, null, unitOfWorkId);
+        }        
     }
 }

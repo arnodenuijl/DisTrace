@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisTrace.TestBase", "test\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisTrace.AspNetCore.Tests", "test\DisTrace.AspNetCore.Tests\DisTrace.AspNetCore.Tests.csproj", "{F5730B02-7098-4719-B782-81CBB9C67009}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisTrace.HttpClient.Tests", "test\DisTrace.HttpClient.Tests\DisTrace.HttpClient.Tests.csproj", "{7D923E41-FC04-4B9B-8468-33D5C3DECA2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{F5730B02-7098-4719-B782-81CBB9C67009}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5730B02-7098-4719-B782-81CBB9C67009}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5730B02-7098-4719-B782-81CBB9C67009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D923E41-FC04-4B9B-8468-33D5C3DECA2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D923E41-FC04-4B9B-8468-33D5C3DECA2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D923E41-FC04-4B9B-8468-33D5C3DECA2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D923E41-FC04-4B9B-8468-33D5C3DECA2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{ADF920B6-C650-48B6-B9BC-7288A29E68AE} = {8BBCEF1E-37BE-41F5-AC02-7207320271E0}
 		{60C2FA82-CB66-4ABB-8667-39BBE5512D84} = {8BBCEF1E-37BE-41F5-AC02-7207320271E0}
 		{F5730B02-7098-4719-B782-81CBB9C67009} = {8BBCEF1E-37BE-41F5-AC02-7207320271E0}
+		{7D923E41-FC04-4B9B-8468-33D5C3DECA2A} = {8BBCEF1E-37BE-41F5-AC02-7207320271E0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0CD9B7A-FB63-4A5A-8AB3-69D99F08827C}

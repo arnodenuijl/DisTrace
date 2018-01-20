@@ -19,25 +19,19 @@ namespace DisTrace.WebApi
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            var requestId = Guid.NewGuid().ToString();
-            var causationId = GetRequestIdFromRequestOrNull(request);
-            var correlationId = GetCorrelationIdFromRequestOrNull(request) ?? causationId ?? requestId;
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
-            _tracingContextProvider.SetTracingContext(new TracingContext(requestId, causationId, correlationId));
+            var unitOfWorkId = GetHeaderValueOrDefault(request, TracingContextHeaders.RequestIdHeaderName);
+            var causationId = GetHeaderValueOrDefault(request, TracingContextHeaders.CausationIdHeaderName);
+            var flowId = GetHeaderValueOrDefault(request, TracingContextHeaders.FlowIdHeaderName);
 
+            _tracingContextProvider.SetTracingContext(new TracingContext(unitOfWorkId, causationId, flowId));
             return base.SendAsync(request, cancellationToken);
         }
 
-        private static string GetRequestIdFromRequestOrNull(HttpRequestMessage requestMessage)
+        private static string GetHeaderValueOrDefault(HttpRequestMessage request, string headerName)
         {
-            return requestMessage.Headers.TryGetValues(TracingContextHeaders.RequestIdHeaderName, out var headers)
-                ? headers.LastOrDefault(s => !string.IsNullOrWhiteSpace(s))
-                : null;
-        }
-
-        private static string GetCorrelationIdFromRequestOrNull(HttpRequestMessage requestMessage)
-        {
-            return requestMessage.Headers.TryGetValues(TracingContextHeaders.CorrelationIdHeaderName, out var headers)
+            return request.Headers.TryGetValues(headerName, out var headers)
                 ? headers.LastOrDefault(s => !string.IsNullOrWhiteSpace(s))
                 : null;
         }
