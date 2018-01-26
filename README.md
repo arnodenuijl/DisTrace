@@ -44,11 +44,12 @@ The other thing in **DisTrace.Core** is the  `ITracingContextProvider` interface
 * **DisTrace.AspNetCore** provides a middleware that can be used to get the ids from incoming requests, create a `TracingContext` and put the `TracingContext` on the request.
 
 It does the following mapping:
-| Header | TracingContext property |
-|---|---|
-| X-Request-Id | UnitOfWorkId |
-| X-Causation-Id | CausationId |
-| X-Flow-Id | FlowId |
+
+Header | TracingContext property |
+---|---|
+X-Request-Id | UnitOfWorkId |
+X-Causation-Id | CausationId |
+X-Flow-Id | FlowId |
 
 The unit of work id is retrieved from the `X-Request-Id` header. The reason the names are different is that the `X-Request-Id` is an often used header to provide a HTTP request with an id for the request. `TracingContext` can however also be used in other contexts then HTTP requests. And when the unit of work is a batch job run the name request id would be misleading.
 
