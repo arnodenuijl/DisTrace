@@ -17,7 +17,7 @@ The use case is a system build from multiple parts that call each other. E.g. a 
 
 * `Unit of work id`: Every request/call/unit of work in a service gets its own unique id. If you e.g. have an API with an /api/something then every call to that API gets a unique id that is only valid for the duration of that specific request. E.g.via the standard x-request-id header. In this case the unit of work id is the request id. In other cases it it can be something that signifies a (batch) run or some other measure of the unit of work.
 
-* `Causation id`: If a unit of work is caused by another unit of work it's good to store than information so later we can recreate the call graph.
+* `Causation id`: If a unit of work is caused by another unit of work it's good to store that information so later we can recreate the call graph. So the `causation id` is the `unit of work id` of the unit of work that called/issued this unit of work.
 
 * `Flow id`: While calls that are related to each other can be linked with each other with only the unit of work and causation ids, it’s convenient to also have a flow id. This is an id that is the same for all the calls in all the services within one single conversation.
 
